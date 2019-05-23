@@ -2,6 +2,8 @@
 
 /* Initial beliefs and rules */
 
+pos(rep_station,1,0).
+
 /* Initial goals */
 
 !start.
@@ -13,6 +15,8 @@
 	<- move_next(X1,Y1).
 
 +pos(X1,Y1) : not check_sensor(X1,Y2) <- .broadcast(tell, machine_critical(X1,Y1)).
+
+
 /*
 +!start : true <- !start.
 
