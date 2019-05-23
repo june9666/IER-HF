@@ -3,7 +3,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry excluding="*.asl" kind="src" path="src/asl"/>
 	<classpathentry kind="src" path="src/java"/>
-	<classpathentry kind="lib" path="C:/Users/dell/eclipse/java-2019-03/eclipse/jason/libs/jason-2.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/BCS/Desktop/Intelligens eloszott rendszerek/HF/JASON/libs/jason-2.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jeno96/Desktop/jason/jason-2.3/libs/jason-2.3.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
