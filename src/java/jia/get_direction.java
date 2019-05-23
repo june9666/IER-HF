@@ -12,7 +12,7 @@ import jason.environment.grid.Location;
 import java.util.ArrayList;
 import java.util.List;
 
-import mining.WorldModel;
+import PhysicalModell.src.WorldModel;
 import busca.AEstrela;
 import busca.Busca;
 import busca.Estado;

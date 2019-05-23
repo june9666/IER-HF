@@ -1,37 +1,59 @@
-// Agent sample_agent in project ierHF
+
 
 /* Initial beliefs and rules */
 
-pos(rep_station,0,0).
+last_dir(null). // the last movement I did
+~hazamegy.
+
 
 /* Initial goals */
+!wait.
 
-!start.
 
-/* Plans */
++!wait : true <- 
+!!wait.
 
-+!start : true <- .print("hello world.").
 
-+machine_critical(X1,Y1) : true <- !repair_machine(X1,Y1).
 
-+!repair_machine(X1,Y1): true <- 
-		!go(X1,Y1);
-		!rep;
-		!go_back.
-		
-+!go(X1,Y1) : pos(Xl,Yl) & my_pos
-	<- true.
-+!go(X1,Y1) : true
-	<- ?pos(Xl,Yl);
-	moveTowards(Xl,Yl);
-	!go(X1,Y1).
-	
-+!rep : true <- repair.		//src/java/.../.repair
++repair(X,Y)[source(gepellenor1)] : ~hazamegy
+  <-!pos(X,Y);
+  .print("repair");
+  jia.repairPress(X,Y);
+  -repair(X,Y)[source(gepellenor1)];
+  +hazamegy;
+  !pos(5,5);
+  -hazamegy;
+   .print("sending done");
+  .broadcast(tell,mehetTovabb).
+     
+     
+/* Moving */
++!pos(X,Y) : pos(X,Y) <- .print("I've reached ",X,"x",Y).
 
-+!go_back : pos(rep_station,Xl,Yl) & pos(r1,X1,Y1)
-	<- true.
-+!go_back : true
-	<- ?pos(rep_station,Xl,Yl);
-	moveTowards(Xl,Yl);
-	!go_back.
+
+// javitani megy
++!pos(X,Y) : not pos(X,Y)
+  <- !next_step(X,Y);
+     !pos(X,Y).
+     
+
+
++!next_step(X,Y)
+   :  pos(AgX,AgY)
+   <- jia.get_direction(AgX, AgY, X, Y, D);
+      //.print("from ",AgX,"x",AgY," to ", X,"x",Y," -> ",D);
+      -+last_dir(D);
+      
+      do(D).
+  
+  
++!next_step(X,Y) : not pos(_,_) // I still do not know my position
+   <- !next_step(X,Y);
+   .print("nextStepnotpos")
+   .
+   
+-!next_step(X,Y) : true  // failure handling -> start again!
+   <- .print("Failed next_step to ", X,"x",Y," fixing and trying again!");
+      -+last_dir(null);
+      !next_step(X,Y).
 

@@ -9,7 +9,7 @@ import jason.asSyntax.Term;
 
 import java.util.Random;
 
-import mining.WorldModel;
+import PhysicalModell.src.WorldModel;
 
 
 public class random_direction extends DefaultInternalAction {
