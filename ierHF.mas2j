@@ -1,6 +1,8 @@
 MAS ierHF {
 
 	infrastructure: Centralised
+	
+	environment: PhysicalModell.src.FactoryEnv("string")
 
 	agents:
 		agent1 sample_agent;
