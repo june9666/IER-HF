@@ -21,7 +21,7 @@ last_dir(null). // the last movement I did
   jia.repairPress(X,Y);
   -repair(X,Y)[source(gepellenor1)];
   +hazamegy;
-  !pos(5,5);
+  !pos(2,5);
   -hazamegy;
    .print("sending done");
   .broadcast(tell,mehetTovabb).

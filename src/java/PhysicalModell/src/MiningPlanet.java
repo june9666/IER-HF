@@ -16,10 +16,11 @@ public class MiningPlanet extends jason.environment.Environment {
 
     private Logger          logger   = Logger.getLogger("jasonTeamSimLocal.mas2j." + MiningPlanet.class.getName());
     
-    WorldModel  model;
+    public  WorldModel  model;
     WorldView   view;
     public static Press press;
-    
+    public static Location fire = null;
+    public static int fireNumber =0;
     int     simId    = 3; // type of environment
     int     nbWorlds = 3;
 
@@ -42,12 +43,17 @@ public class MiningPlanet extends jason.environment.Environment {
         UP, DOWN, RIGHT, LEFT
     };
 
+    public MiningPlanet getPlanet() {
+    	return this;
+    }
     @Override
 	public void init(String[] args) {
+    	  press = new Press();
         hasGUI = args[2].equals("yes"); 
         sleep  = Integer.parseInt(args[1]);
         initWorld(Integer.parseInt(args[0]));
-       press = new Press();
+     
+       
     }
     
     public int getSimId() {
@@ -64,6 +70,7 @@ public class MiningPlanet extends jason.environment.Environment {
         super.stop();
     }
 
+   
     @Override
     public boolean executeAction(String ag, Structure action) {
         boolean result = false;
@@ -136,6 +143,8 @@ public class MiningPlanet extends jason.environment.Environment {
             addPercept(Literal.parseLiteral("sensor2(" + simId + "," + model.getSensor(2).x + "," + model.getSensor(2).y + ")"));
            addPercept(Literal.parseLiteral("sensor3(" + simId + "," + model.getSensor(3).x + "," + model.getSensor(3).y + ")"));
            addPercept(Literal.parseLiteral("sensor4(" + simId + "," + model.getSensor(4).x + "," + model.getSensor(4).y + ")"));
+         //  addPercept(Literal.parseLiteral("tuz(" + simId + "," + 5 + "," + 5 + ")"));
+           
             if (hasGUI) {
                 view = new WorldView(model);
                 view.setEnv(this);
@@ -170,18 +179,60 @@ public class MiningPlanet extends jason.environment.Environment {
        
     	if(ag == 0) updateAgPercept("gepellenor" + (ag + 1), ag);
     	if(ag == 1) updateAgPercept("gepkarbant" + (ag + 1), ag);
+    	if(ag == 2) updateAgPercept("tuztuzolto" + (ag + 1), ag);
+    	if(ag == 3) updateAgPercept("gyarfelugy" + (ag + 1), ag);
+    	 if(model.getAgPos(2).x == 6 &&  model.getAgPos(2).y == 1 && fire == null) {
+             MiningPlanet.fireNumber = 0;
+             }
+    	
+    	
     }
 
+    private void getFireErrors() {
+    	
+    	for(int i = 0; i<= 3; i++) {
+    	if (press.errorCodes.get(i) == 1 && fireNumber == 0  && model.getAgPos(2).x == 6 &&  model.getAgPos(2).y == 1 && fire == null) {
+            MiningPlanet.fireNumber = 0;
+    		fire = getFireRandomLocation();
+    		model.add(WorldModel.FIRE, fire);
+    		  MiningPlanet.fireNumber++;
+    		MiningPlanet.press.zeroizeError();
+            } 
+
+    	} 
+    	}
+    	
+    private int getRndInteger(int min, int max) {
+    	  return (int) (Math.floor(Math.random() * (max - min + 1) ) + min);
+    	}
+    
+    private Location getFireRandomLocation(){
+    	int y =  getRndInteger(5,9);
+    	int x = getRndInteger(5,9);
+    	
+    	return new Location(x,y);
+    }
     private void updateAgPercept(String agName, int ag) {
         clearPercepts(agName);
+       getFireErrors();
+    	   if(fire !=null) {
+    		   addPercept(Literal.parseLiteral("tuz(" + simId + "," + fire.x + "," + fire.y + ")"));
+    		   System.out.println("fireAdded");
+    		   fire = null;
+    	   }
+       
+        
         // its location
         Location l = model.getAgPos(ag);
         //logger.info("agname:" + agName + " ag " + ag);
+        
+        
         addPercept(agName, Literal.parseLiteral("pos(" + l.x + "," + l.y + ")"));
 
         if (model.isCarryingGold(ag)) {
             addPercept(agName, Literal.parseLiteral("carrying_gold"));
         }
+        
 
         // what's around
         updateAgPercept(agName, l.x - 1, l.y - 1);

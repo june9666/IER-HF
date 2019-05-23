@@ -11,11 +11,13 @@ import PhysicalModell.src.MiningPlanet.Move;
 
 public class WorldModel extends GridWorldModel {
 
+	
     public static final int   GOLD  = 16;
     public static final int   DEPOT = 32;
     public static final int   ENEMY = 64;
     public static final int   SENSOR = 128;
-
+    public static final int   FIRE = 256;
+    
     Location                  depot;
     Location				  sensor1;
     Location				  sensor2;
@@ -152,19 +154,16 @@ public class WorldModel extends GridWorldModel {
 
     boolean pick(int ag) {
         Location l = getAgPos(ag);
-        if (hasObject(WorldModel.GOLD, l.x, l.y)) {
-            if (!isCarryingGold(ag)) {
-                remove(WorldModel.GOLD, l.x, l.y);
-                setAgCarryingGold(ag);
+        if (hasObject(WorldModel.FIRE, l.x, l.y)) {
+        	
+                remove(WorldModel.FIRE, l.x, l.y);
+               
                 return true;
-            } else {
-                logger.warning("Agent " + (ag + 1) + " is trying the pick gold, but it is already carrying gold!");
-            }
-        } else {
-            logger.warning("Agent " + (ag + 1) + " is trying the pick gold, but there is no gold at " + l.x + "x" + l.y + "!");
         }
         return false;
     }
+    
+    
 
     boolean drop(int ag) {
         Location l = getAgPos(ag);
@@ -221,14 +220,16 @@ public class WorldModel extends GridWorldModel {
     
     /** no gold/no obstacle world */
     static WorldModel world1() throws Exception {
-        WorldModel model = WorldModel.create(10, 10, 2);
+        WorldModel model = WorldModel.create(10, 10, 3);
         model.setDepot(0, 0);
         model.setAgPos(0, 1, 0);
         model.add(WorldModel.SENSOR, 1,2 );
         model.add(WorldModel.SENSOR, 1,4 );
         model.add(WorldModel.SENSOR, 1,6 );
-       model.add(WorldModel.SENSOR, 1,8 );
-        model.setAgPos(1, 5, 5);
+        model.add(WorldModel.SENSOR, 1,8 );
+      //  model.add(WorldModel.FIRE, 5,5 );
+        model.setAgPos(1, 2, 5);
+        model.setAgPos(2, 6,1);
         
         model.setSensors();
         model.setInitialNbGolds(model.countObjects(WorldModel.GOLD));

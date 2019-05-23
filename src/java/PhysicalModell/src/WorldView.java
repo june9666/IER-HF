@@ -1,6 +1,8 @@
 package PhysicalModell.src;
 
+import jason.asSyntax.Literal;
 import jason.environment.grid.GridWorldView;
+import jason.environment.grid.Location;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -62,7 +64,7 @@ public class WorldView extends GridWorldView {
         jSpeed = new JSlider();
         jSpeed.setMinimum(0);
         jSpeed.setMaximum(400);
-        jSpeed.setValue(350);
+        jSpeed.setValue(300);
         jSpeed.setPaintTicks(true);
         jSpeed.setPaintLabels(true);
         jSpeed.setMajorTickSpacing(100);
@@ -128,7 +130,13 @@ public class WorldView extends GridWorldView {
                 int lin = e.getY() / cellSizeH;
                 if (col >= 0 && lin >= 0 && col < getModel().getWidth() && lin < getModel().getHeight()) {
                     WorldModel wm = (WorldModel)model;
-                    wm.add(WorldModel.GOLD, col, lin);
+                    
+                    System.out.println(MiningPlanet.fireNumber + "firenumber");
+                    if(MiningPlanet.fireNumber == 0 && wm.getAgPos(2).x == 6 &&  wm.getAgPos(2).y == 1) {
+                    wm.add(WorldModel.FIRE, col, lin);
+                    MiningPlanet.fireNumber++;
+                    MiningPlanet.fire = new Location(col,lin);
+                    }
                     wm.setInitialNbGolds(wm.getInitialNbGolds()+1);
                     update(col, lin);
                     udpateCollectedGolds();
@@ -164,6 +172,7 @@ public class WorldView extends GridWorldView {
         case WorldModel.GOLD:    drawGold(g, x, y);  break;
         case WorldModel.ENEMY:   drawEnemy(g, x, y);  break;
         case WorldModel.SENSOR:   drawSensor(g, x, y);  break;
+        case WorldModel.FIRE:   drawFire(g, x, y);  break;
         }
     }
 
@@ -177,7 +186,13 @@ public class WorldView extends GridWorldView {
             idColor = Color.white;
         }
         g.setColor(idColor);
-        drawString(g, x, y, defaultFont, String.valueOf(id+1));
+        if(id == 0)
+        	drawString(g, x, y, defaultFont, "Ellenõr");
+        if(id == 1)
+        	drawString(g, x, y, defaultFont, "Karbantartó");
+        if(id == 2)
+        	drawString(g, x, y, defaultFont, "Tûzoltó");
+       // drawString(g, x, y, defaultFont, String.valueOf(id+1));
     }
 
     public void drawDepot(Graphics g, int x, int y) {
@@ -212,6 +227,12 @@ public class WorldView extends GridWorldView {
     
     public void drawSensor(Graphics g, int x, int y) {
         g.setColor(Color.green);
+        g.fillOval(x * cellSizeW + 7, y * cellSizeH + 7, cellSizeW - 8, cellSizeH - 8);
+    }
+    
+    public void drawFire(Graphics g, int x, int y) {
+        g.setColor(Color.red);
+        
         g.fillOval(x * cellSizeW + 7, y * cellSizeH + 7, cellSizeW - 8, cellSizeH - 8);
     }
     
