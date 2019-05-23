@@ -9,11 +9,6 @@ nemkelljavitas.
 /* Initial goals */
 !checkSensor1.
 
-/* plans for sending the initial position to leader */
-
-
-//!start.
-
 /* Plans */
 
 +!checkSensor1:  nemkelljavitas <- ?sensor1(_,X,Y);
@@ -94,13 +89,7 @@ nemkelljavitas.
       -+last_dir(D);
       do(D).
   
-  
-  
-  
-  
-  
-  
-  
+
   
 +!next_step(X,Y) : not pos(_,_) // I still do not know my position
    <- !next_step(X,Y).
@@ -110,13 +99,3 @@ nemkelljavitas.
       -+last_dir(null);
       !next_step(X,Y).
 
-
-
-/*
-+!start : true <- !start.
-
-+!start : sensor(S)	<- !check_sensor(S).
-
-+!check_sensor(S) : is_normal(S) 
-		<- !next.
-//*/

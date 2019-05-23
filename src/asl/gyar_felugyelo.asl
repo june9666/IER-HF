@@ -1,15 +1,15 @@
-// Agent sample_agent in project ierHF
 
-/* Initial beliefs and rules */
 
-/* Initial goals */
 
-!start.
+!wait.
 
-/* Plans */
+ 
++!wait: true <- !!wait.
+/*.print("itt",X,Y);
+.broadcast(tell,tuzoltas(X,Y)).
+*/
 
-+pos(X1,Y1) : 
-	check_sector(X1,Y2) 		//bool: ha a szenzor rendben van, igazat ad vissza
-	<- move_next(X1,Y1).
++tuz(_,X,Y) : true <- .print("kaptam tuzet");
+.broadcast(tell,tuzoltas(X,Y));.
 
-+pos(X1,Y1) : not check_sector(X1,Y2) <- .broadcast(tell, fire(X1,Y1)).
+

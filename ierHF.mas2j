@@ -2,15 +2,13 @@ MAS ierHF {
 
 	infrastructure: Centralised
 	
-	environment: PhysicalModell.src.MiningPlanet(1,0,yes)
+	environment: PhysicalModell.src.MiningPlanet(1,50,yes)
 
 	agents: 
-	//leader;
 		gepellenor1 gepellenor ;  
-	gepkarbant2 karbantarto;   
-//		gyar_felugyelo gyar_felugyelo;
-//		karbantarto karbantarto;
-	//	tuzolto tuzolto;
+	    gepkarbant2 karbantarto;   
+	    gyarfelugy4 gyar_felugyelo;
+		tuztuzolto3 tuzolto;
 
 	aslSourcePath:
 		"src/asl";

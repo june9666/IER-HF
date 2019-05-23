@@ -25,8 +25,6 @@ public class Press {
   public ArrayList<Double> temp; //Temperature sensor in Celsius
   public ArrayList<Double> pressure; //Pressure sensor in Bar
   public  ArrayList<Double> wearlevel; //Wear level 0-100
-
-
   public  ArrayList<Integer> errorCodes;
     /**
      * fire, explode, or component stop
@@ -36,7 +34,7 @@ public class Press {
     static double ERROR_CODE_STOP = 3;
 
     double workingTime; // Time based values
-
+    int errorTime;
     double hardwareErrorRate; // error rate in hardware components
 
     public void setPrintLevels(boolean printLevels) {
@@ -51,6 +49,7 @@ public class Press {
     public Press() {
         printLevels = true;
         workingTime = 0;
+        errorTime = 0;
         wearlevel = new ArrayList<Double>(4);
         pressure = new ArrayList<Double>(4);
         temp = new ArrayList<Double>(4);
@@ -64,8 +63,14 @@ public class Press {
         }
         sethibaVal();
         doTime();
+        
     }
 
+    public  void zeroizeError(){
+    	for(int i = 0 ; i<=3; i++) {
+    		errorCodes.set(i,0);
+    	}
+    }
     /**
      * increase the timer
      */
@@ -95,8 +100,12 @@ public class Press {
      * @return
      */
     private double sethibaVal() {
-        double var = -0.0002 * pow(workingTime, 6) + 0.0074 * pow(workingTime, 5) - 0.0823 * pow(workingTime, 4)
-                + 0.4208 * pow(workingTime, 3) - 0.923 * pow(workingTime, 2) + 0.4437 * workingTime + 0.8046;
+   
+
+    			
+        double var = -0.000000007 * pow(workingTime, 6) + 0.000006 * pow(workingTime, 5) + 0.000006 * pow(workingTime, 4)
+                - 0.0046 * pow(workingTime, 3) + 0.0784 * pow(workingTime, 2) + 0.4284* workingTime + 0.8846;
+       
         if (var >0.9) //error rate max is 0.9
             return 0.9;
         return var;
@@ -107,6 +116,7 @@ public class Press {
      */
     public void increaseTime() {
         workingTime += 0.1;
+        errorTime +=1;
         hardwareErrorRate = sethibaVal();
         generateError();
         generateHeatAndPressure();
@@ -118,6 +128,7 @@ public class Press {
      */
     private void generateError() {
         double errorRand = Math.random() * hardwareErrorRate; //random number, to control if error occurs or not
+        System.out.println(hardwareErrorRate);
         if (errorRand > 0.6) { //it's set to > 0.6 based on experimental tests
             
         	int errorDrastical = (int) (errorRand * 10); // sets the error impact on system, more drastical, the more wear level decreases
@@ -141,15 +152,16 @@ public class Press {
      * simulate system failiure
      */
     private void generateErrorCode() {
-        double errorRand = Math.random();
-        if (errorRand < 0.94) {
-        } else if (errorRand < 0.96) {
-            errorCodes.set(generateRandomSensorID(), (int) ERROR_CODE_STOP);
-        } else if (errorRand < 0.98) {
-            errorCodes.set(generateRandomSensorID(), (int) ERROR_CODE_EXPLODE);
-        } else if (errorRand < 1) {
-            errorCodes.set(generateRandomSensorID(), (int) ERROR_CODE_FIRE);
-        }
+    	
+    	double errorRand = Math.random() * hardwareErrorRate;
+    	errorTime++;
+    	if (errorRand > 0.88) {
+
+    		if(errorTime > 100)
+        errorCodes.set(generateRandomSensorID(), (int) ERROR_CODE_FIRE);
+    	errorTime =0;
+    	}
+        
 
     }
 
@@ -233,4 +245,6 @@ public class Press {
             System.out.println();
         }
     }
+
+
 }
