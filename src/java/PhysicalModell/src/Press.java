@@ -3,15 +3,31 @@ package PhysicalModell.src;
 import static java.lang.Math.pow;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
+import busca.AEstrela;
+import busca.Busca;
+import busca.Estado;
+import busca.Nodo;
+import jason.asSemantics.DefaultInternalAction;
+import jason.asSemantics.TransitionSystem;
+import jason.asSemantics.Unifier;
+import jason.asSyntax.Atom;
+import jason.asSyntax.NumberTerm;
+import jason.asSyntax.Term;
+import jason.environment.grid.Location;
+ 
 public class Press {
 
-    ArrayList<Double> temp; //Temperature sensor in Celsius
-    ArrayList<Double> pressure; //Pressure sensor in Bar
-    ArrayList<Double> wearlevel; //Wear level 0-100
+	
+	
+	
+  public ArrayList<Double> temp; //Temperature sensor in Celsius
+  public ArrayList<Double> pressure; //Pressure sensor in Bar
+  public  ArrayList<Double> wearlevel; //Wear level 0-100
 
 
-    ArrayList<Integer> errorCodes;
+  public  ArrayList<Integer> errorCodes;
     /**
      * fire, explode, or component stop
      */
@@ -47,8 +63,31 @@ public class Press {
             errorCodes.add(0);
         }
         sethibaVal();
+        doTime();
     }
 
+    /**
+     * increase the timer
+     */
+    private void doTime() {
+    	Thread runit = new Thread() {
+    		public void run() {
+    	
+    	 while(true) {
+             try {
+                 Thread.sleep(100);
+                 increaseTime();
+             //    System.out.print("Wear " + wearlevel.get(0).intValue() + " ");
+             } catch (InterruptedException e) {
+                 e.printStackTrace();
+             }
+         }
+    		}
+     };
+     runit.start();
+    }
+    	
+    
 
     /**
      * setting failiure rate based on elapsedWorkingTime
@@ -58,7 +97,7 @@ public class Press {
     private double sethibaVal() {
         double var = -0.0002 * pow(workingTime, 6) + 0.0074 * pow(workingTime, 5) - 0.0823 * pow(workingTime, 4)
                 + 0.4208 * pow(workingTime, 3) - 0.923 * pow(workingTime, 2) + 0.4437 * workingTime + 0.8046;
-        if (var > 0.9) //error rate max is 0.9
+        if (var >0.9) //error rate max is 0.9
             return 0.9;
         return var;
     }
@@ -71,7 +110,7 @@ public class Press {
         hardwareErrorRate = sethibaVal();
         generateError();
         generateHeatAndPressure();
-        printLevels();
+     //   printLevels();
     }
 
     /**
@@ -80,8 +119,10 @@ public class Press {
     private void generateError() {
         double errorRand = Math.random() * hardwareErrorRate; //random number, to control if error occurs or not
         if (errorRand > 0.6) { //it's set to > 0.6 based on experimental tests
-            int errorDrastical = (int) (errorRand * 10); // sets the error impact on system, more drastical, the more wear level decreases
-            setWearLevel(errorDrastical, generateRandomSensorID());
+            
+        	int errorDrastical = (int) (errorRand * 10); // sets the error impact on system, more drastical, the more wear level decreases
+        	
+        	setWearLevel(errorDrastical, generateRandomSensorID());
         }
         generateErrorCode();
     }
@@ -120,7 +161,11 @@ public class Press {
      */
     public void setWearLevel(int drastical, int id) {
         double minus = drastical * Math.random();
+        if(wearlevel.get(id) - minus <3) {
+        	wearlevel.set(id, wearlevel.get(id) - 4);
+        }else {
         wearlevel.set(id, wearlevel.get(id) - minus);
+        }
     }
 
     /**
@@ -135,6 +180,7 @@ public class Press {
         if (newLevel < 100)
             wearlevel.set(id, newLevel);
         else wearlevel.set(id, 100.0);
+        System.out.println(wearlevel.get(id).intValue());
     }
 
     /**
@@ -143,11 +189,24 @@ public class Press {
     private void generateHeatAndPressure() {
 
         double heatBase = -0.0537 * pow(workingTime, 5) + 1.3859 * pow(workingTime, 4) - 12.244 * pow(workingTime, 3) + 37.827 * pow(workingTime, 2) + 16.869 * pow(workingTime, 1) + 30.813;
+
+        
+        
         double pressureBase = 0.0288 * pow(workingTime, 5) - 0.8144 * pow(workingTime, 4) + 8.5125 * pow(workingTime, 3) - 40.468 * pow(workingTime, 2) + 85.293 * pow(workingTime, 1) + 49.056;
 
         for (int i = 0; i < 4; i++) {
-            temp.set(i, heatBase + Math.random() * 20);
-            pressure.set(i, pressureBase + Math.random() * 20);
+        	
+        	if (heatBase < 300 && heatBase > 15) {
+        		temp.set(i, heatBase + Math.random() * 20);
+        	}else {
+        		temp.set(i, 100.0);
+        	}
+            
+        	if (pressureBase < 300 && pressureBase > 15) {
+        		pressure.set(i, pressureBase + Math.random() * 20);
+        	}else {
+        		pressure.set(i,100.0);
+        	}
         }
 
     }

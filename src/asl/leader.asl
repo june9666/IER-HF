@@ -17,6 +17,8 @@
   <- .print("* InitPos ",A," is ",X,"x",Y);
      // remember who doesn't have a quadrant allocated
      // (initially all miners)
+     +~quad(S,miner1); +~quad(S,miner2);
+     +~quad(S,miner3); +~quad(S,miner4);
      !assign_all_quads(S,[1,2,3,4]).
 +init_pos(S,X,Y)[source(A)] 
   <- .print("- InitPos ",A," is ",X,"x",Y).

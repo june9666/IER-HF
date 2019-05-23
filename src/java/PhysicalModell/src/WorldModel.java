@@ -14,8 +14,13 @@ public class WorldModel extends GridWorldModel {
     public static final int   GOLD  = 16;
     public static final int   DEPOT = 32;
     public static final int   ENEMY = 64;
+    public static final int   SENSOR = 128;
 
     Location                  depot;
+    Location				  sensor1;
+    Location				  sensor2;
+    Location				  sensor3;
+    Location				  sensor4;
     Set<Integer>              agWithGold;  // which agent is carrying gold
     int                       goldsInDepot   = 0;
     int                       initialNbGolds = 0;
@@ -28,6 +33,8 @@ public class WorldModel extends GridWorldModel {
     protected static WorldModel model = null;
     
     synchronized public static WorldModel create(int w, int h, int nbAgs) {
+    	
+    	
         if (model == null) {
             model = new WorldModel(w, h, nbAgs);
         }
@@ -93,6 +100,27 @@ public class WorldModel extends GridWorldModel {
         agWithGold.remove(ag);
     }
 
+    public void setSensors() {
+    	sensor1 = new Location(1,2);
+    	sensor2 = new Location(1,4);
+    	sensor3 = new Location(1,6);
+    	sensor4 = new Location(1,8);
+    	data[1][2] = SENSOR;
+   	data[1][4] = SENSOR;
+    	data[1][6] = SENSOR;
+   	data[1][8] = SENSOR;
+    }
+    public Location getSensor(int i) {
+    	logger.info("called");
+    	switch (i) {
+    	case 1:    	logger.info("called1" + sensor1.x); return sensor1; 
+    	case 2: return sensor2;
+    	case 3: return sensor3;
+    	case 4: return sensor4;
+    	}
+    	return null;
+    	
+    }
     /** Actions **/
 
     boolean move(Move dir, int ag) throws Exception {
@@ -193,10 +221,16 @@ public class WorldModel extends GridWorldModel {
     
     /** no gold/no obstacle world */
     static WorldModel world1() throws Exception {
-        WorldModel model = WorldModel.create(10, 10, 4);
+        WorldModel model = WorldModel.create(10, 10, 2);
         model.setDepot(0, 0);
         model.setAgPos(0, 1, 0);
-        model.add(WorldModel.GOLD, 1,2 );
+        model.add(WorldModel.SENSOR, 1,2 );
+        model.add(WorldModel.SENSOR, 1,4 );
+        model.add(WorldModel.SENSOR, 1,6 );
+       model.add(WorldModel.SENSOR, 1,8 );
+        model.setAgPos(1, 5, 5);
+        
+        model.setSensors();
         model.setInitialNbGolds(model.countObjects(WorldModel.GOLD));
         return model;
     }

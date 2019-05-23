@@ -44,7 +44,7 @@ public class get_direction extends DefaultInternalAction {
                 
                 Nodo solution = searchAlg.busca(new GridState(lini, lini,new Location(itox, itoy), model, "initial"));
                 if (solution != null) {
-                    System.out.println(iagx+"-"+iagy+"/"+itox+"-"+itoy+" = "+solution.montaCaminho());
+                    //System.out.println(iagx+"-"+iagy+"/"+itox+"-"+itoy+" = "+solution.montaCaminho());
                     Nodo root = solution;
                     Estado prev1 = null;
                     Estado prev2 = null;
@@ -57,7 +57,7 @@ public class get_direction extends DefaultInternalAction {
                         sAction =  ((GridState)prev2).op;
                     }
                 } else {
-                    System.out.println("No route from "+iagx+"x"+iagy+" to "+itox+"x"+itoy+"!");
+                    //System.out.println("No route from "+iagx+"x"+iagy+" to "+itox+"x"+itoy+"!");
                 }
             }
             return un.unifies(terms[4], new Atom(sAction));

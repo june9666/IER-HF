@@ -4,9 +4,10 @@ MAS ierHF {
 	
 	environment: PhysicalModell.src.MiningPlanet(1,0,yes)
 
-	agents:
-		leader;
-		gepellenor1 gepellenor ;     
+	agents: 
+	//leader;
+		gepellenor1 gepellenor ;  
+	gepkarbant2 karbantarto;   
 //		gyar_felugyelo gyar_felugyelo;
 //		karbantarto karbantarto;
 	//	tuzolto tuzolto;

@@ -62,7 +62,7 @@ public class WorldView extends GridWorldView {
         jSpeed = new JSlider();
         jSpeed.setMinimum(0);
         jSpeed.setMaximum(400);
-        jSpeed.setValue(50);
+        jSpeed.setValue(350);
         jSpeed.setPaintTicks(true);
         jSpeed.setPaintLabels(true);
         jSpeed.setMajorTickSpacing(100);
@@ -163,6 +163,7 @@ public class WorldView extends GridWorldView {
         case WorldModel.DEPOT:   drawDepot(g, x, y);  break;
         case WorldModel.GOLD:    drawGold(g, x, y);  break;
         case WorldModel.ENEMY:   drawEnemy(g, x, y);  break;
+        case WorldModel.SENSOR:   drawSensor(g, x, y);  break;
         }
     }
 
@@ -208,6 +209,12 @@ public class WorldView extends GridWorldView {
         g.setColor(Color.red);
         g.fillOval(x * cellSizeW + 7, y * cellSizeH + 7, cellSizeW - 8, cellSizeH - 8);
     }
+    
+    public void drawSensor(Graphics g, int x, int y) {
+        g.setColor(Color.green);
+        g.fillOval(x * cellSizeW + 7, y * cellSizeH + 7, cellSizeW - 8, cellSizeH - 8);
+    }
+    
     
     public static void main(String[] args) throws Exception {
         MiningPlanet env = new MiningPlanet();

@@ -18,6 +18,7 @@ public class MiningPlanet extends jason.environment.Environment {
     
     WorldModel  model;
     WorldView   view;
+    public static Press press;
     
     int     simId    = 3; // type of environment
     int     nbWorlds = 3;
@@ -46,6 +47,7 @@ public class MiningPlanet extends jason.environment.Environment {
         hasGUI = args[2].equals("yes"); 
         sleep  = Integer.parseInt(args[1]);
         initWorld(Integer.parseInt(args[0]));
+       press = new Press();
     }
     
     public int getSimId() {
@@ -65,6 +67,7 @@ public class MiningPlanet extends jason.environment.Environment {
     @Override
     public boolean executeAction(String ag, Structure action) {
         boolean result = false;
+        //logger.info("ag: "+ ag + "action " + action);
         try {
             if (sleep > 0) {
                 Thread.sleep(sleep);
@@ -103,6 +106,7 @@ public class MiningPlanet extends jason.environment.Environment {
     }
 
     private int getAgIdBasedOnName(String agName) {
+    //	logger.info(agName + " " +String.valueOf((Integer.parseInt(agName.substring(10))) - 1 ));
         return (Integer.parseInt(agName.substring(10))) - 1;
     }
     
@@ -127,7 +131,11 @@ public class MiningPlanet extends jason.environment.Environment {
             clearPercepts();
             addPercept(Literal.parseLiteral("gsize(" + simId + "," + model.getWidth() + "," + model.getHeight() + ")"));
             addPercept(Literal.parseLiteral("depot(" + simId + "," + model.getDepot().x + "," + model.getDepot().y + ")"));
-          
+          //  logger.info("model.getSensor(1).x   " + model.getSensor(1).x );
+            addPercept(Literal.parseLiteral("sensor1(" + simId + "," + model.getSensor(1).x + "," + model.getSensor(1).y + ")"));
+            addPercept(Literal.parseLiteral("sensor2(" + simId + "," + model.getSensor(2).x + "," + model.getSensor(2).y + ")"));
+           addPercept(Literal.parseLiteral("sensor3(" + simId + "," + model.getSensor(3).x + "," + model.getSensor(3).y + ")"));
+           addPercept(Literal.parseLiteral("sensor4(" + simId + "," + model.getSensor(4).x + "," + model.getSensor(4).y + ")"));
             if (hasGUI) {
                 view = new WorldView(model);
                 view.setEnv(this);
@@ -144,6 +152,7 @@ public class MiningPlanet extends jason.environment.Environment {
     	}
     }
     
+    
     public void endSimulation() {
         addPercept(Literal.parseLiteral("end_of_simulation(" + simId + ",0)"));
         informAgsEnvironmentChanged();
@@ -158,13 +167,16 @@ public class MiningPlanet extends jason.environment.Environment {
     }
 
     private void updateAgPercept(int ag) {
-        updateAgPercept("miner" + (ag + 1), ag);
+       
+    	if(ag == 0) updateAgPercept("gepellenor" + (ag + 1), ag);
+    	if(ag == 1) updateAgPercept("gepkarbant" + (ag + 1), ag);
     }
 
     private void updateAgPercept(String agName, int ag) {
         clearPercepts(agName);
         // its location
         Location l = model.getAgPos(ag);
+        //logger.info("agname:" + agName + " ag " + ag);
         addPercept(agName, Literal.parseLiteral("pos(" + l.x + "," + l.y + ")"));
 
         if (model.isCarryingGold(ag)) {
@@ -197,6 +209,9 @@ public class MiningPlanet extends jason.environment.Environment {
             }
             if (model.hasObject(WorldModel.AGENT, x, y)) {
                 addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",ally)"));
+            }
+            if (model.hasObject(WorldModel.SENSOR, x, y)) {
+                addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",sensor)"));
             }
         }
     }
