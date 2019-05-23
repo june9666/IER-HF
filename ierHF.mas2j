@@ -5,7 +5,10 @@ MAS ierHF {
 	environment: PhysicalModell.src.FactoryEnv("string")
 
 	agents:
-		agent1 sample_agent;
+		gepellenor;
+//		gyar_felugyelo gyar_felugyelo;
+//		karbantarto karbantarto;
+	//	tuzolto tuzolto;
 
 	aslSourcePath:
 		"src/asl";
