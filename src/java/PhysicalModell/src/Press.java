@@ -197,24 +197,22 @@ public class Press {
      */
     private void generateHeatAndPressure() {
 
-        double heatBase = -0.0537 * pow(workingTime, 5) + 1.3859 * pow(workingTime, 4) - 12.244 * pow(workingTime, 3) + 37.827 * pow(workingTime, 2) + 16.869 * pow(workingTime, 1) + 30.813;
+        double heatBase = 0.0004 * pow(workingTime, 3) - 0.0924 * pow(workingTime, 2) + 7.829 * pow(workingTime, 1) + 21.224;
 
-        
-        
-        double pressureBase = 0.0288 * pow(workingTime, 5) - 0.8144 * pow(workingTime, 4) + 8.5125 * pow(workingTime, 3) - 40.468 * pow(workingTime, 2) + 85.293 * pow(workingTime, 1) + 49.056;
+        double pressureBase =  0.0003 * pow(workingTime, 3) - 0.0646 * pow(workingTime, 2) +3.4848 * pow(workingTime, 1) + 59.231;
 
         for (int i = 0; i < 4; i++) {
         	
         	if (heatBase < 300 && heatBase > 15) {
         		temp.set(i, heatBase + Math.random() * 20);
         	}else {
-        		temp.set(i, 100.0);
+        		temp.set(i, 300.0);
         	}
             
         	if (pressureBase < 300 && pressureBase > 15) {
         		pressure.set(i, pressureBase + Math.random() * 20);
         	}else {
-        		pressure.set(i,100.0);
+        		pressure.set(i,300.0);
         	}
         }
 
