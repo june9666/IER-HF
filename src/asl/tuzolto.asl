@@ -22,7 +22,7 @@ tuzoltasVege.
      
      
 /* Moving */
-+!pos(X,Y) : pos(X,Y) <- .print("I've reached ",X,"x",Y).
++!pos(X,Y) : pos(X,Y) <- true.
 
 +!pos(X,Y) : not pos(X,Y)
   <- !next_step(X,Y);
