@@ -1,15 +1,12 @@
 
 
-
+/* Initial goals */
 !wait.
 
- 
+ /* Plans */
 +!wait: true <- !!wait.
-/*.print("itt",X,Y);
-.broadcast(tell,tuzoltas(X,Y)).
-*/
 
-+tuz(_,X,Y) : true <- .print("kaptam tuzet");
++tuz(_,X,Y) : true <- .print("tuzeset tortent");
 .broadcast(tell,tuzoltas(X,Y));.
 
 

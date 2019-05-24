@@ -28,15 +28,15 @@ import javax.swing.event.ChangeListener;
 
 public class WorldView extends GridWorldView {
 
-    MiningPlanet env = null;
+    IntelligentFactory env = null;
     
     public WorldView(WorldModel model) {
-        super(model, "Mining World", 600);
+        super(model, "Gyár figyelõ", 600);
         setVisible(true);
         repaint();
     }
 
-    public void setEnv(MiningPlanet env) {
+    public void setEnv(IntelligentFactory env) {
         this.env = env;
         scenarios.setSelectedIndex(env.getSimId()-1);
     }
@@ -78,16 +78,24 @@ public class WorldView extends GridWorldView {
         JPanel p = new JPanel(new FlowLayout());
         p.setBorder(BorderFactory.createEtchedBorder());
         p.add(jSpeed);
+       
+        
+        JPanel sensor1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        sensor1.setBorder(BorderFactory.createEtchedBorder());
+        sensor1.add(new JLabel("Wearlevel:"));
+        sensor1.add(new JLabel("Temp:"));
+        sensor1.add(new JLabel("Pressure:"));
         
         args.add(sp);
         args.add(p);
+        args.add(sensor1);
 
         JPanel msg = new JPanel();
         msg.setLayout(new BoxLayout(msg, BoxLayout.Y_AXIS));
         msg.setBorder(BorderFactory.createEtchedBorder());
         
         p = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        p.add(new JLabel("Click on the cells to add new pieces of gold."));
+        p.add(new JLabel("Click on the cells to add new fire."));
         msg.add(p);
         p = new JPanel(new FlowLayout(FlowLayout.CENTER));
         p.add(new JLabel("(mouse at:"));
@@ -131,15 +139,13 @@ public class WorldView extends GridWorldView {
                 if (col >= 0 && lin >= 0 && col < getModel().getWidth() && lin < getModel().getHeight()) {
                     WorldModel wm = (WorldModel)model;
                     
-                    System.out.println(MiningPlanet.fireNumber + "firenumber");
-                    if(MiningPlanet.fireNumber == 0 && wm.getAgPos(2).x == 6 &&  wm.getAgPos(2).y == 1) {
+                    System.out.println(IntelligentFactory.fireNumber + "firenumber");
+                    if(IntelligentFactory.fireNumber == 0 && wm.getAgPos(2).x == 6 &&  wm.getAgPos(2).y == 1) {
                     wm.add(WorldModel.FIRE, col, lin);
-                    MiningPlanet.fireNumber++;
-                    MiningPlanet.fire = new Location(col,lin);
+                    IntelligentFactory.fireNumber++;
+                    IntelligentFactory.fire = new Location(col,lin);
                     }
-                    wm.setInitialNbGolds(wm.getInitialNbGolds()+1);
                     update(col, lin);
-                    udpateCollectedGolds();
                 }
             }
             public void mouseExited(MouseEvent e) {}
@@ -160,17 +166,11 @@ public class WorldView extends GridWorldView {
         });
     }
     
-    public void udpateCollectedGolds() {
-        WorldModel wm = (WorldModel)model;
-        jGoldsC.setText(wm.getGoldsInDepot() + "/" + wm.getInitialNbGolds());    
-    }
 
     @Override
     public void draw(Graphics g, int x, int y, int object) {
         switch (object) {
         case WorldModel.DEPOT:   drawDepot(g, x, y);  break;
-        case WorldModel.GOLD:    drawGold(g, x, y);  break;
-        case WorldModel.ENEMY:   drawEnemy(g, x, y);  break;
         case WorldModel.SENSOR:   drawSensor(g, x, y);  break;
         case WorldModel.FIRE:   drawFire(g, x, y);  break;
         }
@@ -179,12 +179,10 @@ public class WorldView extends GridWorldView {
     @Override
     public void drawAgent(Graphics g, int x, int y, Color c, int id) {
         Color idColor = Color.black;
-        if (((WorldModel)model).isCarryingGold(id)) {
-            super.drawAgent(g, x, y, Color.yellow, -1);
-        } else {
+
             super.drawAgent(g, x, y, c, -1);
             idColor = Color.white;
-        }
+        
         g.setColor(idColor);
         if(id == 0)
         	drawString(g, x, y, defaultFont, "Ellenõr");
@@ -192,8 +190,7 @@ public class WorldView extends GridWorldView {
         	drawString(g, x, y, defaultFont, "Karbantartó");
         if(id == 2)
         	drawString(g, x, y, defaultFont, "Tûzoltó");
-       // drawString(g, x, y, defaultFont, String.valueOf(id+1));
-    }
+   }
 
     public void drawDepot(Graphics g, int x, int y) {
         g.setColor(Color.gray);
@@ -231,14 +228,12 @@ public class WorldView extends GridWorldView {
     }
     
     public void drawFire(Graphics g, int x, int y) {
-        g.setColor(Color.red);
-        
+        g.setColor(Color.red); 
         g.fillOval(x * cellSizeW + 7, y * cellSizeH + 7, cellSizeW - 8, cellSizeH - 8);
     }
     
-    
     public static void main(String[] args) throws Exception {
-        MiningPlanet env = new MiningPlanet();
+        IntelligentFactory env = new IntelligentFactory();
         env.init(new String[] {"5","50","yes"});
     }
 }

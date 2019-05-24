@@ -19,9 +19,6 @@ import jason.environment.grid.Location;
  
 public class Press {
 
-	
-	
-	
   public ArrayList<Double> temp; //Temperature sensor in Celsius
   public ArrayList<Double> pressure; //Pressure sensor in Bar
   public  ArrayList<Double> wearlevel; //Wear level 0-100
@@ -112,7 +109,7 @@ public class Press {
     }
 
     /**
-     * dynamic model needs time value, time should be increased external
+     * dynamic model needs time value
      */
     public void increaseTime() {
         workingTime += 0.1;
@@ -128,7 +125,7 @@ public class Press {
      */
     private void generateError() {
         double errorRand = Math.random() * hardwareErrorRate; //random number, to control if error occurs or not
-        System.out.println(hardwareErrorRate);
+     //   System.out.println(hardwareErrorRate);
         if (errorRand > 0.6) { //it's set to > 0.6 based on experimental tests
             
         	int errorDrastical = (int) (errorRand * 10); // sets the error impact on system, more drastical, the more wear level decreases

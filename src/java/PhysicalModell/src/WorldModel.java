@@ -1,5 +1,6 @@
 package PhysicalModell.src;
 
+import jason.asSyntax.Literal;
 import jason.environment.grid.GridWorldModel;
 import jason.environment.grid.Location;
 
@@ -7,14 +8,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import PhysicalModell.src.MiningPlanet.Move;
+import PhysicalModell.src.IntelligentFactory.Move;
 
 public class WorldModel extends GridWorldModel {
 
-	
-    public static final int   GOLD  = 16;
     public static final int   DEPOT = 32;
-    public static final int   ENEMY = 64;
     public static final int   SENSOR = 128;
     public static final int   FIRE = 256;
     
@@ -23,7 +21,6 @@ public class WorldModel extends GridWorldModel {
     Location				  sensor2;
     Location				  sensor3;
     Location				  sensor4;
-    Set<Integer>              agWithGold;  // which agent is carrying gold
     int                       goldsInDepot   = 0;
     int                       initialNbGolds = 0;
 
@@ -53,7 +50,6 @@ public class WorldModel extends GridWorldModel {
 
     private WorldModel(int w, int h, int nbAgs) {
         super(w, h, nbAgs);
-        agWithGold = new HashSet<Integer>();
     }
 
     public String getId() {
@@ -70,38 +66,14 @@ public class WorldModel extends GridWorldModel {
         return depot;
     }
 
-    public int getGoldsInDepot() {
-        return goldsInDepot;
-    }
-    
-    public boolean isAllGoldsCollected() {
-        return goldsInDepot == initialNbGolds;
-    }
-    
-    public void setInitialNbGolds(int i) {
-        initialNbGolds = i;
-    }
-    
-    public int getInitialNbGolds() {
-        return initialNbGolds;
-    }
 
-    public boolean isCarryingGold(int ag) {
-        return agWithGold.contains(ag);
-    }
 
     public void setDepot(int x, int y) {
         depot = new Location(x, y);
         data[x][y] = DEPOT;
     }
 
-    public void setAgCarryingGold(int ag) {
-        agWithGold.add(ag);
-    }
-    public void setAgNotCarryingGold(int ag) {
-        agWithGold.remove(ag);
-    }
-
+  
     public void setSensors() {
     	sensor1 = new Location(1,2);
     	sensor2 = new Location(1,4);
@@ -155,70 +127,20 @@ public class WorldModel extends GridWorldModel {
     boolean pick(int ag) {
         Location l = getAgPos(ag);
         if (hasObject(WorldModel.FIRE, l.x, l.y)) {
-        	
+        	IntelligentFactory.removeFire = new Location(l.x,l.y);
                 remove(WorldModel.FIRE, l.x, l.y);
                
                 return true;
         }
         return false;
     }
+  
     
-    
-
-    boolean drop(int ag) {
-        Location l = getAgPos(ag);
-        if (isCarryingGold(ag)) {
-            if (l.equals(getDepot())) {
-                goldsInDepot++;
-                logger.info("Agent " + (ag + 1) + " carried a gold to depot!");
-            } else {
-                add(WorldModel.GOLD, l.x, l.y);
-            }
-            setAgNotCarryingGold(ag);
-            return true;
-        }
-        return false;
-    }
-
-    /*
-    public void clearAgView(int agId) {
-        clearAgView(getAgPos(agId).x, getAgPos(agId).y);
-    }
-
-    public void clearAgView(int x, int y) {
-        int e1 = ~(ENEMY + ALLY + GOLD);
-        if (x > 0 && y > 0) {
-            data[x - 1][y - 1] &= e1;
-        } // nw
-        if (y > 0) {
-            data[x][y - 1] &= e1;
-        } // n
-        if (x < (width - 1) && y > 0) {
-            data[x + 1][y - 1] &= e1;
-        } // ne
-
-        if (x > 0) {
-            data[x - 1][y] &= e1;
-        } // w
-        data[x][y] &= e1; // cur
-        if (x < (width - 1)) {
-            data[x + 1][y] &= e1;
-        } // e
-
-        if (x > 0 && y < (height - 1)) {
-            data[x - 1][y + 1] &= e1;
-        } // sw
-        if (y < (height - 1)) {
-            data[x][y + 1] &= e1;
-        } // s
-        if (x < (width - 1) && y < (height - 1)) {
-            data[x + 1][y + 1] &= e1;
-        } // se
-    }
-    */
-
-    
-    /** no gold/no obstacle world */
+    /**
+     * default world
+     * @return
+     * @throws Exception
+     */
     static WorldModel world1() throws Exception {
         WorldModel model = WorldModel.create(10, 10, 3);
         model.setDepot(0, 0);
@@ -227,12 +149,9 @@ public class WorldModel extends GridWorldModel {
         model.add(WorldModel.SENSOR, 1,4 );
         model.add(WorldModel.SENSOR, 1,6 );
         model.add(WorldModel.SENSOR, 1,8 );
-      //  model.add(WorldModel.FIRE, 5,5 );
         model.setAgPos(1, 2, 5);
         model.setAgPos(2, 6,1);
-        
         model.setSensors();
-        model.setInitialNbGolds(model.countObjects(WorldModel.GOLD));
         return model;
     }
 }

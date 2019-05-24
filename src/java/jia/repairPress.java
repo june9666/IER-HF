@@ -22,17 +22,17 @@ public class repairPress   extends DefaultInternalAction{
           
           switch (Y) {
           	case 2: 
-          		MiningPlanet.press.repair(0, 100000); 
+          		IntelligentFactory.press.repair(0, 100000); 
           		break;
           
           	case 4: 
-          		MiningPlanet.press.repair(1, 200000); break;
+          		IntelligentFactory.press.repair(1, 200000); break;
           
           	case 6: 
-          		MiningPlanet.press.repair(2, 100000); break;
+          		IntelligentFactory.press.repair(2, 100000); break;
           
           	case 8: 
-          		MiningPlanet.press.repair(3, 300000); break;
+          		IntelligentFactory.press.repair(3, 300000); break;
 	    }
           return true;
 	
