@@ -1,6 +1,8 @@
 # IER-HF
 https://docs.google.com/document/d/1bRS2Jm-WxoGTGetIEjnqncYtqLov8FCsPA8RyD_nhsI/edit?usp=sharing
 
+A program működése videó által bemutatva:
+https://www.youtube.com/watch?v=KceZz60SpCM&feature=youtu.be
 
 Alap scenárió:
 
