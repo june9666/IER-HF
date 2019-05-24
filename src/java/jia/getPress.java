@@ -34,7 +34,7 @@ public class getPress   extends DefaultInternalAction{
             	return true;
             }
             	case 4: 	//logger.info("level1 " + IntelligentFactory.press.wearlevel.get(1).intValue());
-            if(IntelligentFactory.press.wearlevel.get(1).intValue() <70) {
+            if(IntelligentFactory.press.wearlevel.get(1).intValue() <80) {
         
 			return false;
             }else {
@@ -47,7 +47,7 @@ public class getPress   extends DefaultInternalAction{
             	return true;
             }
             	case 8: 	//logger.info("level3 " + IntelligentFactory.press.wearlevel.get(3).intValue());
-            if(IntelligentFactory.press.wearlevel.get(3).intValue() <70) {
+            if(IntelligentFactory.press.wearlevel.get(3).intValue() <60) {
 			return false;
             }else {
             	return true;
