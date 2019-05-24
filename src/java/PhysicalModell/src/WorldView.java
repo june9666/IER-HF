@@ -14,8 +14,13 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
+import java.io.File;
+import java.io.IOException;
 import java.util.Hashtable;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
@@ -188,8 +193,19 @@ public class WorldView extends GridWorldView {
         	drawString(g, x, y, defaultFont, "Ellenõr");
         if(id == 1)
         	drawString(g, x, y, defaultFont, "Karbantartó");
-        if(id == 2)
-        	drawString(g, x, y, defaultFont, "Tûzoltó");
+        if(id == 2) {
+        	 BufferedImage img = null;
+		try {
+			img = ImageIO.read(new File("firefighter.jpg"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+        
+        g.drawImage(img, (x * cellSizeW ), y * cellSizeH  , null);
+        }
+
    }
 
     public void drawDepot(Graphics g, int x, int y) {
@@ -228,8 +244,18 @@ public class WorldView extends GridWorldView {
     }
     
     public void drawFire(Graphics g, int x, int y) {
-        g.setColor(Color.red); 
-        g.fillOval(x * cellSizeW + 7, y * cellSizeH + 7, cellSizeW - 8, cellSizeH - 8);
+
+        BufferedImage img = null;
+		try {
+			img = ImageIO.read(new File("fire.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+        
+        g.drawImage(img, (x * cellSizeW + 3), y * cellSizeH +3 , null);
+
     }
     
     public static void main(String[] args) throws Exception {

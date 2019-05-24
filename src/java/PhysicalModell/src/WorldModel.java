@@ -144,6 +144,8 @@ public class WorldModel extends GridWorldModel {
     static WorldModel world1() throws Exception {
         WorldModel model = WorldModel.create(10, 10, 3);
         model.setDepot(0, 0);
+        model.setDepot(2, 5);
+        model.setDepot(6, 1);
         model.setAgPos(0, 1, 0);
         model.add(WorldModel.SENSOR, 1,2 );
         model.add(WorldModel.SENSOR, 1,4 );
