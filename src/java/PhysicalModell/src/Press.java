@@ -98,8 +98,6 @@ public class Press {
      */
     private double sethibaVal() {
    
-
-    			
         double var = -0.000000007 * pow(workingTime, 6) + 0.000006 * pow(workingTime, 5) + 0.000006 * pow(workingTime, 4)
                 - 0.0046 * pow(workingTime, 3) + 0.0784 * pow(workingTime, 2) + 0.4284* workingTime + 0.8846;
        

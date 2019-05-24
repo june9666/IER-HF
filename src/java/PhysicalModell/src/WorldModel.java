@@ -21,8 +21,6 @@ public class WorldModel extends GridWorldModel {
     Location				  sensor2;
     Location				  sensor3;
     Location				  sensor4;
-    int                       goldsInDepot   = 0;
-    int                       initialNbGolds = 0;
 
     private Logger            logger   = Logger.getLogger("jasonTeamSimLocal.mas2j." + WorldModel.class.getName());
 
@@ -80,9 +78,9 @@ public class WorldModel extends GridWorldModel {
     	sensor3 = new Location(1,6);
     	sensor4 = new Location(1,8);
     	data[1][2] = SENSOR;
-   	data[1][4] = SENSOR;
+    	data[1][4] = SENSOR;
     	data[1][6] = SENSOR;
-   	data[1][8] = SENSOR;
+    	data[1][8] = SENSOR;
     }
     public Location getSensor(int i) {
     	logger.info("called");

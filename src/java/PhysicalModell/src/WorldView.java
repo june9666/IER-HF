@@ -100,6 +100,7 @@ public class WorldView extends GridWorldView {
         p.setBorder(BorderFactory.createEtchedBorder());
         p.add(jSpeed);
        
+        //a szenzor kiolvasást a 3. "kollega" írta.
         //1. szenzor értékei
         JPanel sensor1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         sensor1.setBorder(BorderFactory.createEtchedBorder());
