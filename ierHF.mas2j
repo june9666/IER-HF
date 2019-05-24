@@ -2,7 +2,7 @@ MAS ierHF {
 
 	infrastructure: Centralised
 	
-	environment: PhysicalModell.src.MiningPlanet(1,50,yes)
+	environment: PhysicalModell.src.IntelligentFactory(1,50,yes)
 
 	agents: 
 		gepellenor1 gepellenor ;  

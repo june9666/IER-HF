@@ -5,16 +5,13 @@
 last_dir(null). // the last movement I did
 ~hazamegy.
 
-
 /* Initial goals */
 !wait.
 
+/* Plans */
++!wait : true <- !!wait.
 
-+!wait : true <- 
-!!wait.
-
-
-
+/* karbantartásra van szükség */
 +repair(X,Y)[source(gepellenor1)] : ~hazamegy
   <-!pos(X,Y);
   .print("repair");
@@ -30,22 +27,15 @@ last_dir(null). // the last movement I did
 /* Moving */
 +!pos(X,Y) : pos(X,Y) <- .print("I've reached ",X,"x",Y).
 
-
-// javitani megy
 +!pos(X,Y) : not pos(X,Y)
   <- !next_step(X,Y);
      !pos(X,Y).
-     
-
-
+    
 +!next_step(X,Y)
    :  pos(AgX,AgY)
    <- jia.get_direction(AgX, AgY, X, Y, D);
-      //.print("from ",AgX,"x",AgY," to ", X,"x",Y," -> ",D);
-      -+last_dir(D);
-      
+      -+last_dir(D);   
       do(D).
-  
   
 +!next_step(X,Y) : not pos(_,_) // I still do not know my position
    <- !next_step(X,Y);
